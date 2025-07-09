@@ -1,38 +1,98 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
+import Swal from 'sweetalert2';
 
-export default function AbsensiForm() {
+export default function AbsensiForm({ sudahAbsen }) {
   const [loading, setLoading] = useState(false);
   const [lokasi, setLokasi] = useState({ lat: null, lng: null });
-  const [message, setMessage] = useState('');
 
   const ambilLokasi = () => {
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setLokasi({ lat: latitude, lng: longitude });
+      ({ coords }) => {
+        setLokasi({ lat: coords.latitude, lng: coords.longitude });
         setLoading(false);
       },
-      (err) => {
-        console.error(err);
-        setMessage('Gagal mengambil lokasi.');
+      () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal mengambil lokasi',
+          text: 'Pastikan izin lokasi diaktifkan.',
+        });
         setLoading(false);
       }
     );
   };
 
+  const handleError = (errors) => {
+    if (errors.response && errors.response.status === 409) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Sudah Absen',
+        text: 'Kamu sudah melakukan absensi hari ini.',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal mengirim absensi',
+        text: 'Silakan coba lagi.',
+      });
+    }
+  };
+
   const submitAbsensi = () => {
+    if (sudahAbsen) {
+      return Swal.fire({
+        icon: 'info',
+        title: 'Sudah Absen',
+        text: 'Kamu sudah melakukan absensi hari ini.',
+      });
+    }
+
     if (!lokasi.lat || !lokasi.lng) {
-      setMessage('Ambil lokasi dulu!');
-      return;
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Lokasi belum tersedia',
+        text: 'Silakan ambil lokasi terlebih dahulu.',
+      });
     }
 
     router.post('/absen', lokasi, {
-      onSuccess: () => setMessage('Absensi berhasil!'),
-      onError: () => setMessage('Gagal mengirim absensi'),
+      onSuccess: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Absensi Berhasil',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => router.visit('/dashboard'));
+      },
+      onError: (errors) => {
+        if (errors.absen) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sudah Absen',
+            text: errors.absen,
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal mengirim absensi',
+            text: 'Silakan coba lagi.',
+          });
+        }
+      }
     });
   };
+
+  // const lihatStatus = () => {
+  //   Swal.fire({
+  //     icon: 'info',
+  //     title: 'Status Absensi',
+  //     text: sudahAbsen
+  //       ? 'Kamu sudah absen hari ini.'
+  //       : 'Kamu belum absen hari ini.',
+  //   });
+  // };
 
   return (
     <div className="max-w-lg mx-auto mt-20 p-6 bg-white rounded-xl shadow-md">
@@ -53,12 +113,17 @@ export default function AbsensiForm() {
 
       <button
         onClick={submitAbsensi}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
+        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full mb-3"
       >
         Absen Sekarang
       </button>
 
-      {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+      {/* <button
+        onClick={lihatStatus}
+        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 w-full"
+      >
+        Lihat Status Absensi
+      </button> */}
     </div>
   );
 }
