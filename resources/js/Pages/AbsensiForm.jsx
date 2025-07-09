@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
 import Swal from 'sweetalert2';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Head } from '@inertiajs/react';
 
 export default function AbsensiForm({ sudahAbsen }) {
   const [loading, setLoading] = useState(false);
@@ -95,35 +97,45 @@ export default function AbsensiForm({ sudahAbsen }) {
   // };
 
   return (
-    <div className="max-w-lg mx-auto mt-20 p-6 bg-white rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold mb-4 text-center">Form Absensi</h2>
+    <AuthenticatedLayout
+    header={
+      <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        Form Absensi
+      </h2>
+    }
+    >
+      <Head title="Absensi" />
+      <div className="max-w-lg mx-auto mt-20 p-6 bg-white rounded-xl shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-center">Form Absensi</h2>
 
-      <div className="mb-4">
-        <p>Latitude: {lokasi.lat ?? '-'}</p>
-        <p>Longitude: {lokasi.lng ?? '-'}</p>
+        <div className="mb-4">
+          <p>Latitude: {lokasi.lat ?? '-'}</p>
+          <p>Longitude: {lokasi.lng ?? '-'}</p>
+        </div>
+
+        <button
+          onClick={ambilLokasi}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full mb-3"
+          disabled={loading}
+        >
+          {loading ? 'Mengambil Lokasi...' : 'Ambil Lokasi'}
+        </button>
+
+        <button
+          onClick={submitAbsensi}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full mb-3"
+        >
+          Absen Sekarang
+        </button>
+
+        {/* Uncomment the following button if you want to enable the "Lihat Status Absensi" feature */}
+        {/* <button
+          onClick={lihatStatus}
+          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 w-full"
+        >
+          Lihat Status Absensi
+        </button> */}
       </div>
-
-      <button
-        onClick={ambilLokasi}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full mb-3"
-        disabled={loading}
-      >
-        {loading ? 'Mengambil Lokasi...' : 'Ambil Lokasi'}
-      </button>
-
-      <button
-        onClick={submitAbsensi}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full mb-3"
-      >
-        Absen Sekarang
-      </button>
-
-      {/* <button
-        onClick={lihatStatus}
-        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 w-full"
-      >
-        Lihat Status Absensi
-      </button> */}
-    </div>
+    </AuthenticatedLayout>
   );
 }
