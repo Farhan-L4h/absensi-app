@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\AbsensiController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -25,3 +26,11 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+// absensi
+Route::middleware(['auth'])->group(function () {
+    Route::get('/absen', [AbsensiController::class, 'index']);
+    Route::post('/absen', [AbsensiController::class, 'store']);
+});
+
