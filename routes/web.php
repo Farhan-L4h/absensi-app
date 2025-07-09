@@ -30,7 +30,7 @@ require __DIR__.'/auth.php';
 
 // absensi
 Route::middleware(['auth'])->group(function () {
-    Route::get('/absen', [AbsensiController::class, 'index']);
+    Route::get('/absen', fn () => Inertia::render('AbsensiForm'))->name('absen');
     Route::post('/absen', [AbsensiController::class, 'store']);
 });
 

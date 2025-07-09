@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model
 {
-    protected $primaryKey = 'id';
+    protected $fillable = [
+        'user_id',
+        'waktu',
+        'lat',
+        'lng'
+    ];
 }

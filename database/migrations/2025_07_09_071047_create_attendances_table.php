@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->dateTime('waktu');
-            $table->string('status'); // hadir, telat, dll
+            $table->string('status')->default('Alpha'); // hadir, telat, dll
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('lng', 10, 7)->nullable();
             $table->timestamps();
