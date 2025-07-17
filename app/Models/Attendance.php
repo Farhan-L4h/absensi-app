@@ -10,6 +10,7 @@ class Attendance extends Model
         'user_id',
         'waktu',
         'lat',
-        'lng'
+        'lng',
+        'status',
     ];
 }

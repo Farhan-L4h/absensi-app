@@ -36,5 +36,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::middleware(['auth'])->group(function () {
     Route::get('/absen', fn () => Inertia::render('AbsensiForm'))->name('absen');
     Route::post('/absen', [AbsensiController::class, 'store']);
+    Route::get('/rekap', [AbsensiController::class, 'recap'])->name('rekap');
+    Route::get('/rekap/data', [AbsensiController::class, 'recap_show'])->name('rekap.data');
 });
 
