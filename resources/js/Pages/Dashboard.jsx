@@ -99,40 +99,114 @@ export default function Dashboard({ sudahAbsen, totalUsers, totalAbsensiHariIni,
 
                             {/* Recent Attendances */}
                             {recentAttendances && recentAttendances.length > 0 && (
-                                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                                <div className="bg-gradient-to-br from-white to-gray-50 overflow-hidden shadow-xl sm:rounded-2xl border border-gray-200">
+                                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+                                        <div className="flex items-center space-x-3">
+                                            <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                                                <span className="text-white text-lg">📋</span>
+                                            </div>
+                                            <h4 className="text-xl font-bold text-white">Absensi Terbaru</h4>
+                                        </div>
+                                    </div>
                                     <div className="p-6">
-                                        <h4 className="text-lg font-semibold mb-4">Absensi Terbaru</h4>
-                                        <div className="overflow-x-auto">
+                                        <div className="overflow-x-auto rounded-xl border border-gray-200">
                                             <table className="min-w-full divide-y divide-gray-200">
-                                                <thead className="bg-gray-50">
+                                                <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                                                     <tr>
-                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
-                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-gray-200">
+                                                            <div className="flex items-center space-x-2">
+                                                                <span>👤</span>
+                                                                <span>Karyawan</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-gray-200">
+                                                            <div className="flex items-center space-x-2">
+                                                                <span>📅</span>
+                                                                <span>Tanggal</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-gray-200">
+                                                            <div className="flex items-center space-x-2">
+                                                                <span>⏰</span>
+                                                                <span>Waktu</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                                            <div className="flex items-center space-x-2">
+                                                                <span>📊</span>
+                                                                <span>Status</span>
+                                                            </div>
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="bg-white divide-y divide-gray-200">
                                                     {recentAttendances.map((attendance, index) => (
-                                                        <tr key={index}>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                                {attendance.user?.name || 'N/A'}
+                                                        <tr key={index} className={`transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                                                            <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">
+                                                                <div className="flex items-center space-x-3">
+                                                                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                                                                        <span className="text-white text-sm font-bold">
+                                                                            {(attendance.user?.name || 'N/A').charAt(0).toUpperCase()}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div className="text-sm font-bold text-gray-900">
+                                                                            {attendance.user?.name || 'N/A'}
+                                                                        </div>
+                                                                        <div className="text-xs text-gray-500">
+                                                                            {attendance.user?.email || ''}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                {attendance.tanggal}
+                                                            <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">
+                                                                <div className="text-sm font-medium text-gray-900">
+                                                                    {attendance.tanggal}
+                                                                </div>
+                                                                <div className="text-xs text-gray-500">
+                                                                    {attendance.hari || ''}
+                                                                </div>
                                                             </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                {attendance.waktu}
+                                                            <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">
+                                                                <div className="text-sm font-bold text-gray-900">
+                                                                    {attendance.waktu || attendance.jam}
+                                                                </div>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                                <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                                                    Hadir
+                                                                <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${
+                                                                    attendance.status === 'Hadir' ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200' :
+                                                                    attendance.status === 'Telat' ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-800 border border-orange-200' :
+                                                                    attendance.status === 'Sakit' ? 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 border border-blue-200' :
+                                                                    attendance.status === 'Izin' ? 'bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800 border border-purple-200' :
+                                                                    attendance.status === 'Alpha' ? 'bg-gradient-to-r from-red-100 to-rose-100 text-red-800 border border-red-200' :
+                                                                    'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200'
+                                                                }`}>
+                                                                    <span className="mr-1">
+                                                                        {attendance.status === 'Hadir' ? '✅' :
+                                                                         attendance.status === 'Telat' ? '⏰' :
+                                                                         attendance.status === 'Sakit' ? '🤒' :
+                                                                         attendance.status === 'Izin' ? '📋' :
+                                                                         attendance.status === 'Alpha' ? '❌' : '✅'}
+                                                                    </span>
+                                                                    {attendance.status || 'Hadir'}
                                                                 </span>
                                                             </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
                                             </table>
+                                        </div>
+                                        
+                                        {/* View All Link */}
+                                        <div className="mt-4 text-center">
+                                            <Link
+                                                href={route('rekap')}
+                                                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                                            >
+                                                <span className="mr-2">📊</span>
+                                                Lihat Semua Rekap Absensi
+                                                <span className="ml-2">→</span>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

@@ -686,18 +686,46 @@ export default function RecapAbsensi() {
                                             <p className="text-xs font-medium text-orange-600 uppercase tracking-wide">Lokasi Absensi</p>
                                             {selectedDetail.lat && selectedDetail.lng ? (
                                                 <div>
-                                                    <p className="text-sm font-bold text-orange-800 mb-2">
+                                                    <p className="text-sm font-bold text-orange-800 mb-3">
                                                         Lat: {selectedDetail.lat}, Lng: {selectedDetail.lng}
                                                     </p>
-                                                    <a
-                                                        href={`https://maps.google.com?q=${selectedDetail.lat},${selectedDetail.lng}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="inline-flex items-center px-3 py-1.5 bg-orange-500 text-white text-xs font-medium rounded-lg hover:bg-orange-600 transition-all duration-200 shadow-sm hover:shadow-md"
-                                                    >
-                                                        <span className="mr-1">🗺️</span>
-                                                        Lihat di Google Maps
-                                                    </a>
+                                                    
+                                                    {/* Mini Map */}
+                                                    <div className="bg-white rounded-lg p-2 border border-orange-200 mb-3">
+                                                        <iframe
+                                                            width="100%"
+                                                            height="150"
+                                                            frameBorder="0"
+                                                            scrolling="no"
+                                                            marginHeight="0"
+                                                            marginWidth="0"
+                                                            src={`https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(selectedDetail.lng)-0.01},${parseFloat(selectedDetail.lat)-0.01},${parseFloat(selectedDetail.lng)+0.01},${parseFloat(selectedDetail.lat)+0.01}&layer=mapnik&marker=${selectedDetail.lat},${selectedDetail.lng}`}
+                                                            allowFullScreen
+                                                            className="border-0"
+                                                        ></iframe>
+                                                    </div>
+
+                                                    {/* Action Buttons */}
+                                                    <div className="flex space-x-2">
+                                                        <a
+                                                            href={`https://www.openstreetmap.org/?mlat=${selectedDetail.lat}&mlon=${selectedDetail.lng}&zoom=16`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-orange-500 text-white text-xs font-medium rounded-lg hover:bg-orange-600 transition-all duration-200 shadow-sm hover:shadow-md"
+                                                        >
+                                                            <span className="mr-1">🗺️</span>
+                                                            OpenStreetMap
+                                                        </a>
+                                                        <a
+                                                            href={`https://maps.google.com?q=${selectedDetail.lat},${selectedDetail.lng}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex-1 inline-flex items-center justify-center px-3 py-2 bg-green-500 text-white text-xs font-medium rounded-lg hover:bg-green-600 transition-all duration-200 shadow-sm hover:shadow-md"
+                                                        >
+                                                            <span className="mr-1">🌐</span>
+                                                            Google Maps
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             ) : (
                                                 <p className="text-sm font-bold text-orange-400">Tidak ada data lokasi</p>

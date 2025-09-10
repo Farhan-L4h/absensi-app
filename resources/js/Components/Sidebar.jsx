@@ -186,7 +186,7 @@ export default function Sidebar({ user }) {
                     </div>
                     
                     {/* Footer Info */}
-                    <div className="mt-4 pt-4 border-t border-gray-200">
+                    {/* <div className="mt-4 pt-4 border-t border-gray-200">
                         <div className="text-xs text-gray-500 text-center space-y-2">
                             <div className="flex items-center justify-center space-x-3">
                                 <span className="flex items-center px-2 py-1 bg-red-50 text-red-600 rounded-md">
@@ -203,7 +203,7 @@ export default function Sidebar({ user }) {
                                 <div className="text-xs">Digital Modern v1.0</div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>
