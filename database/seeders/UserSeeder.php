@@ -24,14 +24,57 @@ class UserSeeder extends Seeder
         ]);
 
         // Create Regular Users
-        User::create([
-            'name' => 'Farhan',
-            'email' => 'Farhan@Apps.com',
-            'password' => Hash::make('userKu'),
-            'role' => 'user',
-            'email_verified_at' => now(),
-        ]);
-        // Create additional users using factory if needed
-        // User::factory(10)->create();
+        $users = [
+            [
+                'name' => 'Farhan',
+                'email' => 'farhan@apps.com',
+                'password' => Hash::make('userKu'),
+            ],
+            [
+                'name' => 'Siti Nurhaliza',
+                'email' => 'siti@apps.com',
+                'password' => Hash::make('userKu'),
+            ],
+            [
+                'name' => 'Budi Santoso',
+                'email' => 'budi@apps.com',
+                'password' => Hash::make('userKu'),
+            ],
+            [
+                'name' => 'Rina Wijaya',
+                'email' => 'rina@apps.com',
+                'password' => Hash::make('userKu'),
+            ],
+            [
+                'name' => 'Ahmad Fauzi',
+                'email' => 'ahmad@apps.com',
+                'password' => Hash::make('userKu'),
+            ],
+            [
+                'name' => 'Maya Sari',
+                'email' => 'maya@apps.com',
+                'password' => Hash::make('userKu'),
+            ],
+            [
+                'name' => 'Dedi Kurniawan',
+                'email' => 'dedi@apps.com',
+                'password' => Hash::make('userKu'),
+            ],
+            [
+                'name' => 'Lestari Indah',
+                'email' => 'lestari@apps.com',
+                'password' => Hash::make('userKu'),
+            ]
+        ];
+
+        foreach ($users as $userData) {
+            User::create([
+                'name' => $userData['name'],
+                'email' => $userData['email'],
+                'password' => $userData['password'],
+                'role' => 'user',
+                'email_verified_at' => now(),
+            ]);
+        }
     }
 }

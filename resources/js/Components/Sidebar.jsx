@@ -141,7 +141,7 @@ export default function Sidebar({ user }) {
                                 <div className="flex items-center justify-between">
                                     <span className="font-medium">{item.name}</span>
                                     {item.badge && !item.current && (
-                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 ml-2 animate-pulse">
+                                        <span className="inline-flex text-center items-center p-1 rounded-xl text-xs font-regular bg-orange-100 text-orange-800 ml-1 animate-pulse">
                                             {item.badge}
                                         </span>
                                     )}
