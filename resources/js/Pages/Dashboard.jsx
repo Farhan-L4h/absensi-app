@@ -9,8 +9,8 @@ export default function Dashboard({ sudahAbsen, totalUsers, totalAbsensiHariIni,
         <AuthenticatedLayout>
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="py-4">
+                <div className="mx-auto max-w-7xl">
                     {user.role === 'admin' ? (
                         // Dashboard Admin
                         <div className="space-y-6">

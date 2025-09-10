@@ -6,7 +6,7 @@ export default function Welcome({ auth }) {
             <Head title="Sistem Absensi Digital" />
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
                 {/* Navigation */}
-                <nav className="px-6 py-4">
+                <nav className="px-6 py-4 bg-white sticky top-0 z-20 shadow-sm border-b border-gray-200">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                             <div className="text-3xl">📝</div>
@@ -16,7 +16,7 @@ export default function Welcome({ auth }) {
                             </div>
                         </div>
                         
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-4 ">
                             {auth.user ? (
                                 <Link
                                     href={route('dashboard')}
@@ -48,7 +48,7 @@ export default function Welcome({ auth }) {
                 </nav>
 
                 {/* Hero Section */}
-                <div className="flex-1 flex items-center justify-center px-6">
+                <div className="flex-1 flex items-center justify-center px-6 mt-4">
                     <div className="max-w-4xl mx-auto text-center">
                         <div className="mb-8">
                             <div className="text-8xl mb-6">⏰</div>
@@ -129,7 +129,7 @@ export default function Welcome({ auth }) {
                 </div>
 
                 {/* Footer */}
-                <footer className="px-6 py-8 text-center text-gray-600">
+                <footer className="px-6 py-8 text-center text-gray-600 bg-white mt-4">
                     <div className="max-w-4xl mx-auto">
                         <div className="border-t border-gray-200 pt-8">
                             <p className="mb-4">
