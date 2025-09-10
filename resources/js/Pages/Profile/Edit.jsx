@@ -8,29 +8,68 @@ export default function Edit({ mustVerifyEmail, status }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Profile
-                </h2>
+                <div className="flex items-center space-x-3">
+                    <span className="text-2xl">👤</span>
+                    <div>
+                        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                            Edit Profile
+                        </h2>
+                        <p className="text-sm text-gray-600">Kelola informasi akun Anda</p>
+                    </div>
+                </div>
             }
         >
-            <Head title="Profile" />
+            <Head title="Edit Profile - Sistem Absensi" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                        <UpdateProfileInformationForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
-                            className="max-w-xl"
-                        />
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
+                        <div className="p-6 border-b border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                                <span className="mr-2">📝</span>
+                                Informasi Profile
+                            </h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                                Perbarui informasi profil dan alamat email akun Anda.
+                            </p>
+                        </div>
+                        <div className="p-6">
+                            <UpdateProfileInformationForm
+                                mustVerifyEmail={mustVerifyEmail}
+                                status={status}
+                                className="max-w-xl"
+                            />
+                        </div>
                     </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                        <UpdatePasswordForm className="max-w-xl" />
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
+                        <div className="p-6 border-b border-gray-200">
+                            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                                <span className="mr-2">🔒</span>
+                                Perbarui Password
+                            </h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                                Pastikan akun Anda menggunakan password yang panjang dan acak agar tetap aman.
+                            </p>
+                        </div>
+                        <div className="p-6">
+                            <UpdatePasswordForm className="max-w-xl" />
+                        </div>
                     </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                        <DeleteUserForm className="max-w-xl" />
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-red-200">
+                        <div className="p-6 border-b border-red-200">
+                            <h3 className="text-lg font-semibold text-red-900 flex items-center">
+                                <span className="mr-2">⚠️</span>
+                                Hapus Akun
+                            </h3>
+                            <p className="text-sm text-red-600 mt-1">
+                                Setelah akun Anda dihapus, semua sumber daya dan data akan dihapus secara permanen.
+                            </p>
+                        </div>
+                        <div className="p-6">
+                            <DeleteUserForm className="max-w-xl" />
+                        </div>
                     </div>
                 </div>
             </div>

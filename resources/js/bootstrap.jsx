@@ -1,11 +1,4 @@
-import '../css/app.css';
-import { createRoot } from 'react-dom/client';
-import { createInertiaApp } from '@inertiajs/inertia-react';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import axios from 'axios';
+window.axios = axios;
 
-createInertiaApp({
-  resolve: (name) => resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob('./Pages/**/*.jsx')),
-  setup({ el, App, props }) {
-    createRoot(el).render(<App {...props} />);
-  },
-});
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

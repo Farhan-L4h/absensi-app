@@ -13,7 +13,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
+            <nav className="border-b border-gray-100 bg-white sticky top-0 z-50">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -30,6 +30,32 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+                                
+                                {user.role === 'admin' && (
+                                    <>
+                                        <NavLink
+                                            href={route('rekap')}
+                                            active={route().current('rekap')}
+                                        >
+                                            Rekap Absensi
+                                        </NavLink>
+                                        <NavLink
+                                            href={route('admin.users')}
+                                            active={route().current('admin.users*')}
+                                        >
+                                            Kelola User
+                                        </NavLink>
+                                    </>
+                                )}
+                                
+                                {user.role === 'user' && (
+                                    <NavLink
+                                        href={route('absen')}
+                                        active={route().current('absen')}
+                                    >
+                                        Absensi
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -134,6 +160,32 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Dashboard
                         </ResponsiveNavLink>
+                        
+                        {user.role === 'admin' && (
+                            <>
+                                <ResponsiveNavLink
+                                    href={route('rekap')}
+                                    active={route().current('rekap')}
+                                >
+                                    Rekap Absensi
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('admin.users')}
+                                    active={route().current('admin.users*')}
+                                >
+                                    Kelola User
+                                </ResponsiveNavLink>
+                            </>
+                        )}
+                        
+                        {user.role === 'user' && (
+                            <ResponsiveNavLink
+                                href={route('absen')}
+                                active={route().current('absen')}
+                            >
+                                Absensi
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">

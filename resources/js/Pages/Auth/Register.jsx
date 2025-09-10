@@ -23,11 +23,16 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title="Register" />
+            <Head title="Daftar - Sistem Absensi" />
 
-            <form onSubmit={submit}>
+            <div className="mb-6 text-center">
+                <h2 className="text-2xl font-bold text-gray-900">Daftar Akun Baru</h2>
+                <p className="text-gray-600 mt-2">Buat akun untuk mengakses sistem absensi</p>
+            </div>
+
+            <form onSubmit={submit} className="space-y-4">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Nama Lengkap" />
 
                     <TextInput
                         id="name"
@@ -37,13 +42,14 @@ export default function Register() {
                         autoComplete="name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
+                        placeholder="Masukkan nama lengkap Anda"
                         required
                     />
 
                     <InputError message={errors.name} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div>
                     <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput
@@ -54,13 +60,14 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
+                        placeholder="Masukkan alamat email Anda"
                         required
                     />
 
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div>
                     <InputLabel htmlFor="password" value="Password" />
 
                     <TextInput
@@ -71,16 +78,17 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
+                        placeholder="Buat password yang kuat"
                         required
                     />
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div>
                     <InputLabel
                         htmlFor="password_confirmation"
-                        value="Confirm Password"
+                        value="Konfirmasi Password"
                     />
 
                     <TextInput
@@ -93,6 +101,7 @@ export default function Register() {
                         onChange={(e) =>
                             setData('password_confirmation', e.target.value)
                         }
+                        placeholder="Ulangi password Anda"
                         required
                     />
 
@@ -102,17 +111,19 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                <div className="space-y-4">
+                    <PrimaryButton className="w-full justify-center" disabled={processing}>
+                        {processing ? 'Memproses...' : 'Daftar Sekarang'}
                     </PrimaryButton>
+
+                    <div className="text-center">
+                        <Link
+                            href={route('login')}
+                            className="text-sm text-blue-600 hover:text-blue-800 underline"
+                        >
+                            Sudah punya akun? Masuk di sini
+                        </Link>
+                    </div>
                 </div>
             </form>
         </GuestLayout>

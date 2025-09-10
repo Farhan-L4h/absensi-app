@@ -40,3 +40,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/rekap/data', [AbsensiController::class, 'recap_show'])->name('rekap.data');
 });
 
+// Admin routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
+    Route::get('/users/create', [App\Http\Controllers\AdminController::class, 'createUser'])->name('users.create');
+    Route::post('/users', [App\Http\Controllers\AdminController::class, 'storeUser'])->name('users.store');
+    Route::get('/users/{user}/edit', [App\Http\Controllers\AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('users.update');
+    Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
+});
+

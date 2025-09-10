@@ -64,32 +64,52 @@ class AbsensiController extends Controller
         $month = $request->query('month', now()->format('m'));
         $year = $request->query('year', now()->format('Y'));
 
-        // Ambil data absensi user untuk bulan & tahun
-        $attendances = Attendance::where('user_id', $user->id)
-            ->whereYear('waktu', $year)
-            ->whereMonth('waktu', $month)
-            ->orderBy('waktu')
-            ->get()
-            ->groupBy(fn($row) => Carbon::parse($row->waktu)->format('Y-m-d'));
-
         $recap = [];
 
-        foreach ($attendances as $date => $records) {
-            $dayName = Carbon::parse($date)->translatedFormat('l');
-            $jamMasuk = optional($records->sortBy('waktu')->first())->waktu;
-            $jamFormatted = $jamMasuk ? Carbon::parse($jamMasuk)->format('H:i') : '-';
-            $status = $records->pluck('status')->implode(', ');
+        if ($user->role === 'admin') {
+            // Admin melihat semua data absensi
+            $attendances = Attendance::with('user')
+                ->whereYear('waktu', $year)
+                ->whereMonth('waktu', $month)
+                ->orderBy('waktu', 'desc')
+                ->get();
 
-            $recap[] = [
-                'tanggal' => $date,
-                'hari' => $dayName,
-                'jam' => $jamFormatted,
-                'status' => $status,
-            ];
+            foreach ($attendances as $attendance) {
+                $recap[] = [
+                    'tanggal' => Carbon::parse($attendance->waktu)->format('Y-m-d'),
+                    'hari' => Carbon::parse($attendance->waktu)->translatedFormat('l'),
+                    'jam' => Carbon::parse($attendance->waktu)->format('H:i'),
+                    'status' => $attendance->status,
+                    'user_name' => $attendance->user->name,
+                ];
+            }
+        } else {
+            // User biasa hanya melihat data mereka sendiri
+            $attendances = Attendance::where('user_id', $user->id)
+                ->whereYear('waktu', $year)
+                ->whereMonth('waktu', $month)
+                ->orderBy('waktu')
+                ->get()
+                ->groupBy(fn($row) => Carbon::parse($row->waktu)->format('Y-m-d'));
+
+            foreach ($attendances as $date => $records) {
+                $dayName = Carbon::parse($date)->translatedFormat('l');
+                $jamMasuk = optional($records->sortBy('waktu')->first())->waktu;
+                $jamFormatted = $jamMasuk ? Carbon::parse($jamMasuk)->format('H:i') : '-';
+                $status = $records->pluck('status')->implode(', ');
+
+                $recap[] = [
+                    'tanggal' => $date,
+                    'hari' => $dayName,
+                    'jam' => $jamFormatted,
+                    'status' => $status,
+                ];
+            }
         }
 
         return response()->json([
             'user' => $user->name,
+            'user_role' => $user->role,
             'month' => $month,
             'year' => $year,
             'recap' => $recap,
