@@ -49,42 +49,59 @@ export default function AbsensiForm({ sudahAbsen }) {
     }
   }, []);
 
-  const ambilLokasi = () => {
+  const ambilLokasi = async () => {
     setLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
+    
+    try {
+      // Langsung gunakan IP geolocation
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+      
+      if (data.latitude && data.longitude) {
+        const coords = {
+          latitude: data.latitude,
+          longitude: data.longitude,
+          accuracy: 10000 // IP-based location is less accurate
+        };
+        
         const newLocation = { lat: coords.latitude, lng: coords.longitude };
         setLokasi(newLocation);
 
-        // Update map and marker
+        // Update map and marker with Google Maps style
         if (map && window.L) {
-          map.setView([newLocation.lat, newLocation.lng], 17);
+          map.setView([newLocation.lat, newLocation.lng], 16);
 
           // Remove existing marker
           if (marker) {
             map.removeLayer(marker);
           }
 
-          // Create custom icon
+          // Create Google Maps style custom icon
           const customIcon = window.L.divIcon({
             html: `
               <div style="
-                width: 30px; 
-                height: 30px; 
-                background: #3B82F6; 
-                border: 3px solid white; 
-                border-radius: 50%; 
-                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 14px;
-              ">📍</div>
+                width: 32px; 
+                height: 40px; 
+                background: #EA4335; 
+                border-radius: 50% 50% 50% 0;
+                transform: rotate(-45deg);
+                box-shadow: 0 3px 6px rgba(234, 67, 53, 0.5);
+                position: relative;
+              ">
+                <div style="
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%) rotate(45deg);
+                  color: white;
+                  font-size: 16px;
+                  font-weight: bold;
+                ">📍</div>
+              </div>
             `,
-            className: 'custom-location-marker',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
+            className: 'google-maps-marker',
+            iconSize: [32, 40],
+            iconAnchor: [16, 35]
           });
 
           // Add new marker
@@ -92,52 +109,111 @@ export default function AbsensiForm({ sudahAbsen }) {
             icon: customIcon
           }).addTo(map);
 
-          // Add popup
+          // Add Google Maps style popup
           newMarker.bindPopup(`
-            <div style="padding: 8px; min-width: 200px;">
-              <h3 style="margin: 0 0 8px 0; color: #3B82F6; font-weight: bold;">📍 Lokasi Anda</h3>
-              <p style="margin: 2px 0; font-size: 12px; color: #666;">
-                <strong>Lat:</strong> ${coords.latitude.toFixed(6)}
-              </p>
-              <p style="margin: 2px 0; font-size: 12px; color: #666;">
-                <strong>Lng:</strong> ${coords.longitude.toFixed(6)}
-              </p>
+            <div style="padding: 10px; min-width: 220px; font-family: 'Roboto', sans-serif;">
+              <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                <div style="width: 24px; height: 24px; background: #4285f4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+                  <span style="color: white; font-size: 12px;">📍</span>
+                </div>
+                <h3 style="margin: 0; color: #1a73e8; font-weight: 500; font-size: 14px;">Lokasi Anda</h3>
+              </div>
+              <div style="background: #f8f9fa; padding: 8px; border-radius: 8px; margin-bottom: 8px;">
+                <p style="margin: 2px 0; font-size: 12px; color: #5f6368;">
+                  <strong style="color: #202124;">Lat:</strong> ${coords.latitude.toFixed(6)}
+                </p>
+                <p style="margin: 2px 0; font-size: 12px; color: #5f6368;">
+                  <strong style="color: #202124;">Lng:</strong> ${coords.longitude.toFixed(6)}
+                </p>
+                <p style="margin: 2px 0; font-size: 12px; color: #5f6368;">
+                  <strong style="color: #202124;">Lokasi:</strong> ${data.city}, ${data.country_name}
+                </p>
+              </div>
+              <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 6px; border-radius: 6px;">
+                <p style="margin: 0; font-size: 11px; color: #856404;">
+                  ⚠️ Lokasi berdasarkan IP address dengan akurasi ±${(coords.accuracy/1000).toFixed(1)} km
+                </p>
+              </div>
             </div>
-          `).openPopup();
+          `, {
+            closeButton: true,
+            autoClose: false,
+            className: 'google-maps-popup'
+          }).openPopup();
 
           setMarker(newMarker);
         }
 
         setLoading(false);
         
+        // Show success alert with improved design
         Swal.fire({
-          icon: 'success',
-          title: '📍 Lokasi Berhasil Diambil!',
+          icon: 'info',
+          title: '📍 Lokasi Berhasil Diambil',
           html: `
-            <div class="text-left">
-              <p class="mb-2"><strong>Latitude:</strong> ${coords.latitude.toFixed(6)}</p>
-              <p><strong>Longitude:</strong> ${coords.longitude.toFixed(6)}</p>
+            <div style="text-left; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 15px; color: white; margin: 10px 0;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 10px; text-align: center;">
+                  <div style="font-size: 20px; margin-bottom: 5px;">🌐</div>
+                  <div style="font-size: 12px; margin-bottom: 3px; opacity: 0.9;">Latitude</div>
+                  <div style="font-size: 16px; font-weight: bold;">${coords.latitude.toFixed(6)}</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 10px; text-align: center;">
+                  <div style="font-size: 20px; margin-bottom: 5px;">🗺️</div>
+                  <div style="font-size: 12px; margin-bottom: 3px; opacity: 0.9;">Longitude</div>
+                  <div style="font-size: 16px; font-weight: bold;">${coords.longitude.toFixed(6)}</div>
+                </div>
+              </div>
+              <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+                <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                  <span style="margin-right: 8px; font-size: 16px;">📍</span>
+                  <strong>Lokasi Terdeteksi:</strong>
+                </div>
+                <div style="font-size: 15px; margin-left: 24px;">${data.city}, ${data.country_name}</div>
+              </div>
+              <div style="background: rgba(255,193,7,0.2); padding: 10px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <div style="display: flex; align-items: center;">
+                  <span style="margin-right: 8px;">⚠️</span>
+                  <span style="font-size: 12px;"><strong>Akurasi:</strong> ±${(coords.accuracy/1000).toFixed(1)} km (berbasis IP address)</span>
+                </div>
+              </div>
             </div>
           `,
           showConfirmButton: true,
-          confirmButtonText: 'OK',
-          timer: 3000
+          confirmButtonText: '👍 Siap Absen',
+          confirmButtonColor: '#1a73e8',
+          timer: 8000,
+          width: '500px',
+          backdrop: `rgba(0,0,0,0.6)`
         });
-      },
-      () => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal mengambil lokasi',
-          text: 'Pastikan izin lokasi diaktifkan dan koneksi internet stabil.',
-        });
-        setLoading(false);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
+
+      } else {
+        throw new Error('Tidak dapat mendapatkan koordinat dari IP');
       }
-    );
+    } catch (error) {
+      console.error('IP location failed:', error);
+      setLoading(false);
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal mengambil lokasi',
+        html: `
+          <div style="text-align: left; padding: 10px;">
+            <p style="margin-bottom: 15px;">Tidak dapat mengambil lokasi dari IP address.</p>
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 12px; border-radius: 8px;">
+              <h4 style="color: #856404; margin: 0 0 8px 0; font-size: 14px;">💡 Solusi:</h4>
+              <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #856404;">
+                <li>Pastikan koneksi internet stabil</li>
+                <li>Coba refresh halaman</li>
+                <li>Gunakan jaringan yang berbeda jika perlu</li>
+              </ul>
+            </div>
+          </div>
+        `,
+        confirmButtonText: 'Coba Lagi',
+        confirmButtonColor: '#dc3545'
+      });
+    }
   };
 
   const handleError = (errors) => {
@@ -226,7 +302,7 @@ export default function AbsensiForm({ sudahAbsen }) {
                 <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
                   Form Absensi
                 </h3>
-                <p className="text-gray-600 text-lg">Lakukan absensi dengan lokasi GPS real-time melalui OpenStreetMap</p>
+                <p className="text-gray-600 text-lg">Lakukan absensi dengan lokasi otomatis berbasis IP address melalui peta interaktif</p>
               </div>
 
               {/* Status Absensi */}
@@ -369,7 +445,7 @@ export default function AbsensiForm({ sudahAbsen }) {
                   ) : (
                     <>
                       <span className="mr-3 text-xl">📍</span>
-                      Ambil Lokasi dengan GPS
+                      Ambil Lokasi Otomatis
                     </>
                   )}
                 </button>
@@ -396,8 +472,8 @@ export default function AbsensiForm({ sudahAbsen }) {
                     <h4 className="text-purple-800 font-bold text-lg mb-3">Panduan Absensi:</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="flex items-center text-purple-700">
-                        <span className="mr-2">📍</span>
-                        <span className="text-sm">Pastikan GPS aktif dan koneksi internet stabil</span>
+                        <span className="mr-2">🌐</span>
+                        <span className="text-sm">Lokasi diambil otomatis dari IP address Anda</span>
                       </div>
                       <div className="flex items-center text-purple-700">
                         <span className="mr-2">🗺️</span>
